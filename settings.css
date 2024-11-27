@@ -1,0 +1,194 @@
+/* --- General Styling --- */
+body {
+    font-family: Roboto, sans-serif; /* Sets the font for the page */
+    display: flex;
+    flex-direction: column; /* Stack elements vertically */
+    height: 100vh; /* Full height of the viewport */
+    margin: 0; /* Remove default margins */
+    font-size: 16px; /* Base font size for the page */
+}
+
+/* --- Top Bar --- */
+#top-bar {
+    background-color: #dfdfdf; /* Light gray background */
+    color: #333333; /* Dark gray text color */
+    padding: 15px; /* Add padding */
+    text-align: left; /* Align text to the left */
+    font-size: 32px; /* Set font size smaller for balance */
+    font-weight: bold; /* Make the title bold */
+}
+
+/* --- Main Container --- */
+#main-container {
+    display: flex; /* Flexbox for side-by-side layout */
+    flex: 1; /* Allow this container to take up remaining space */
+}
+
+/* --- Side Menu --- */
+#menu {
+    width: 300px; /* Fixed width for the menu */
+    background-color: #f0f0f0; /* Light background for the menu */
+    padding: 15px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow around the menu */
+    height: calc(100vh - 60px); /* Make the menu take up full height minus top bar */
+    position: fixed; /* Fix it in place while scrolling */
+    top: 67px; /* Position menu below the top bar */
+}
+
+#menu a {
+    display: block;
+    padding: 12px; /* Slightly more padding for readability */
+    text-decoration: none; /* Remove underline */
+    color: #333; /* Dark text color */
+    margin-bottom: 12px; /* Space between menu items */
+    background-color: #ddd; /* Light background color for menu items */
+    border-radius: 10px; /* Rounded corners */
+    font-size: 20px; /* Adjust font size for menu items */
+}
+
+#menu a:hover {
+    background-color: #ccc; /* Darken background on hover */
+}
+
+/* --- Content Area --- */
+#settings-content {
+    margin-left: 330px; /* Offset content to the right to make space for the menu */
+    padding: 20px; /* Add padding inside the content area */
+    overflow-y: auto; /* Allow scrolling if content overflows */
+    flex: 1; /* Allow content area to grow to available space */
+    font-size: 16px; /* Set font size for the content */
+}
+
+#settings-content h2 {
+    color: #333; /* Dark text color for headings */
+    font-size: 24px; /* Heading font size */
+    margin-bottom: 12px; /* Space below headings */
+}
+
+/* --- Form Elements --- */
+label {
+    display: block;
+    margin-top: 15px; /* Add space above labels */
+    font-size: 18px; /* Larger font size for labels */
+}
+
+/* --- Inputs & Textareas --- */
+select, .styled-input, .styled-textarea {
+    width: 100%; /* Make inputs fill the available width */
+    margin-top: 5px; /* Add a small space above form fields */
+    padding: 10px; /* Increased padding inside form fields */
+    box-sizing: border-box; /* Ensure padding is included in width calculation */
+    font-size: 16px; /* Font size for inputs */
+}
+
+/* Styled input and textarea specific styles */
+.styled-input, .styled-textarea {
+    font-size: 16px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.styled-input:focus, .styled-textarea:focus {
+    border-color: #5c9ded;
+    outline: none;
+    box-shadow: 0 0 5px rgba(92, 157, 237, 0.6);
+}
+
+/* Placeholder text styles */
+.styled-input::placeholder, .styled-textarea::placeholder {
+    color: #aaa;
+    font-style: italic;
+}
+
+.styled-textarea {
+    min-height: 150px;
+}
+
+/* --- Tab Navigation --- */
+#tabs {
+    display: flex; /* Display tabs inline */
+    margin-top: 20px; /* Add space above tabs */
+    margin-bottom: 20px; /* Add space below tabs */
+    font-size: 18px; /* Font size for tab text */
+}
+
+#tabs div {
+    padding: 12px;
+    background-color: #eee; /* Light background for tabs */
+    margin-right: 5px; /* Space between tabs */
+    cursor: pointer; /* Change cursor to pointer on hover */
+    border-radius: 5px; /* Rounded corners for tabs */
+}
+
+#tabs div.active {
+    background-color: #ddd; /* Darker background for active tab */
+}
+
+/* --- Buttons --- */
+button, #new-prompt, #save-prompt, #delete-prompt {
+    padding: 12px 20px; /* Padding inside the button */
+    border: none; /* Remove border */
+    cursor: pointer; /* Pointer cursor on hover */
+    border-radius: 8px; /* Rounded corners */
+    font-size: 18px; /* Adjust font size for buttons */
+}
+
+button {
+    margin-top: 10px;
+    background-color: #4CAF50; /* Green background */
+    color: white; /* White text color */
+}
+
+button:hover {
+    background-color: #45a049; /* Darker green on hover */
+}
+
+/* New prompt button */
+#new-prompt {
+    background-color: #4095c6; /* Blue background */
+}
+
+#new-prompt:hover {
+    background-color: #1a79b1; /* Darker blue on hover */
+}
+
+/* Save button */
+#save-prompt {
+    background-color: #4CAF50; /* Green background */
+}
+
+#save-prompt:hover {
+    background-color: #45a049; /* Darker green on hover */
+}
+
+/* Delete button */
+#delete-prompt {
+    background-color: #ca2727; /* Red background */
+}
+
+#delete-prompt:hover {
+    background-color: #b11818; /* Darker red on hover */
+}
+
+/* --- Status Messages --- */
+#status, #save-prompt-status {
+    color: green; /* Green color for success message */
+    margin-top: 10px;
+    font-size: 14px; /* Smaller font size for status message */
+    display: none; /* Hide by default */
+}
+
+/* --- Save Button Container --- */
+.save-container {
+    position: fixed; /* Fix the save button to the bottom right */
+    bottom: 20px; /* Space from the bottom */
+    right: 20px; /* Space from the right */
+    text-align: right; /* Align save button to the right */
+}
+
+/* --- Miscellaneous --- */
+.hint {
+    font-size: 14px; /* Slightly larger text for hints */
+    color: gray; /* Gray color for hint */
+}

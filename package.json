@@ -1,0 +1,21 @@
+{
+  "name": "youtube-summarizer",
+  "version": "1.0.0",
+  "description": "This Chrome extension displays a transcript for YouTube videos alongside the video content. It also includes a settings page for customization, allowing users to enable or disable features like AI summarizers and customize other settings like font size and summarizer detail level.",
+  "main": "background.js",
+  "scripts": {
+    "build": "webpack"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "css-loader": "^7.1.2",
+    "style-loader": "^4.0.0",
+    "webpack": "^5.96.1",
+    "webpack-cli": "^5.1.4"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.21.0"
+  }
+}

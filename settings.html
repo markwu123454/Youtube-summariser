@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Character set and title for the page -->
+    <meta charset="UTF-8">
+    <title>Extension Settings</title>
+    <link rel="stylesheet" href="settings.css">
+</head>
+<body>
+
+<!-- Top bar with title "Extension Settings" -->
+<div id="top-bar">
+    Extension Settings
+</div>
+
+<!-- Main container: side menu and content area -->
+<div id="main-container">
+    <div id="menu">
+        <!-- Menu items with links to the respective sections (API Key, Model & Prompt) -->
+        <a href="#api-key" id="menu-api-key">API Key</a>
+        <a href="#model-prompt" id="menu-model-prompt">Model & Prompt</a>
+    </div>
+
+    <div id="settings-content">
+
+        <!-- API Key Section -->
+        <div id="api-key">
+            <h3>Gemini API Key</h3>
+        </div>
+
+        <!-- Model & Prompt Section -->
+        <div id="model-prompt" style="display: none;">
+            <h3>Model & Prompt Settings</h3>
+
+            <!-- prompts selection content -->
+            <div id="prompts" class="tab-content">
+                <label for="prompts-select">Select Prompts:</label>
+                <select id="prompts-select">
+                    <option value="new-prompt">New prompt</option>
+                    <!-- Existing prompts will be dynamically populated here -->
+                </select>
+
+                <!-- Title Input Field -->
+                <div class="input-container">
+                    <label for="prompt-title">Prompt Title:</label>
+                    <input type="text" id="prompt-title" class="styled-input" placeholder="Enter prompt title"/>
+                </div>
+
+                <!-- System Prompt for Summary -->
+                <label for="system-prompt-summary">System Prompt for Summarising video:</label>
+                <span class="hint">Enter the instructions that the AI will follow to summarise the video.</span>
+                <textarea id="system-prompt-summary" class="styled-textarea" placeholder="Enter system prompt for summary"></textarea>
+
+                <!-- User Prompt for Summary -->
+                <label for="user-prompt-summary">Prompt for Summary:</label>
+                <span class="hint">Enter the format you would like the AI to use when summarizing the video.</span>
+                <span class="hint">You can use {title}, {channel}, {transcript} to represent the title, channel, and transcript of the video.</span>
+                <textarea id="user-prompt-summary" class="styled-textarea" placeholder="Enter user prompt for summary"></textarea>
+
+                <!-- Buttons for saving and deleting the prompt -->
+                <div class="button-container">
+                    <button id="new-prompt">New Prompt</button>
+                    <button id="save-prompt">Save Prompt</button>
+                    <button id="delete-prompt">Delete Prompt</button>
+                </div>
+
+                <!-- Status messages (initially hidden) -->
+                <p id="save-prompt-status" style="display: none;">Prompt saved!</p>
+                <p id="delete-prompt-status" style="display: none;">Prompt deleted!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Save button and status message section -->
+<div class="save-container">
+    <p id="status">Settings saved!</p>
+    <button id="save-settings">Save Settings</button>
+</div>
+
+<!-- External script for handling functionality -->
+<script src="settings.js"></script>
+
+</body>
+</html>
