@@ -9,6 +9,7 @@
     max-width: 400px; /* Adjust this based on your sidebar width */
 }
 
+
 /* Title styling with a subtle gradient background */
 #transcript-title {
     font-family: Poppins, sans-serif;
@@ -22,6 +23,28 @@
     padding-bottom: 12px;
     border-radius: 5px;
 }
+
+
+/* Styling for the empty info box */
+#info {
+    background-color: #f0f0f0; /* Light gray background */
+    border: 1px solid #e0e0e0; /* Same border style as the scroll box */
+    border-radius: 5px; /* Rounded corners for a smooth look */
+    padding: 10px; /* Space inside the box for content */
+    margin-top: 10px; /* Space above the box */
+    max-width: 100%; /* Ensures it fits nicely within the container */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Subtle shadow for depth */
+}
+
+/* Styling for the label inside the info box */
+#info-label {
+    color: #555555; /* Dark gray color for the label text */
+    font-size: 14px; /* Adjust the text size */
+    font-weight: 600; /* Slightly bold for emphasis */
+    margin: 0; /* Remove default margin */
+}
+
+
 
 /* Chatbox-like layout for messages */
 #transcript-content {
@@ -56,6 +79,7 @@
     margin: 0;
 }
 
+
 /* Input field and button container */
 #input-container {
     display: flex;
@@ -69,9 +93,13 @@
     font-size: 14px;
     border-radius: 5px;
     border: 1px solid #ddd;
+    display: none; /* Hidden initially */
 }
 
+
+/* Button for getting AI responses */
 #send-btn {
+    width: 100%; /* Takes the full width initially */
     padding: 8px 16px;
     background: linear-gradient(90deg, #0073e6, #0099ff);
     color: white;
@@ -79,12 +107,21 @@
     font-size: 14px;
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: all 0.5s ease; /* Smooth transition */
+}
+
+#send-btn.expanded {
+    width: auto; /* Adjusts width dynamically when expanded */
+}
+
+#send-btn.inactive {
+    background-color: #737373;
 }
 
 #send-btn:hover {
     background-color: #005bb5;
 }
+
 
 /* Add a nice scroll bar styling */
 #transcript-content::-webkit-scrollbar {

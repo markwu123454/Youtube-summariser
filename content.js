@@ -11,11 +11,14 @@ let state = {
     button_state: false,
     chat_state: "Not Initialized"
 };
+let warnUser = {
+    token_exceed: false
+}
 let currentChat;
-let currentChatLength = 0;
 // chat_states:
 // Not Initialized, No Summary Generated, Generating Summary, Error in Summary,
 // Waiting, Generating Response, Error in Response
+
 
 class ports {
     constructor() {
@@ -63,21 +66,31 @@ class ports {
                         break;
 
                     case "streamingSummary":
-                        if (state.chat_state === "Generating Summary" || state.chat_state === "Generating Response") {
-                            console.error("Error generating summary:", message.error);
-                            currentChatPosition++;
-                            updateChatMessage("Error: " + message.error, "left", currentChatPosition);
-                        } else {
-                            console.error("Unexpected ai output:", message.error);
+                        if (message.error === "DOMException")
+                            if (state.chat_state === "Generating Summary" || state.chat_state === "Generating Response") {
+                                console.error("Error generating summary:", message.error);
+                                currentChatPosition++;
+                                updateChatMessage("Error: " + message.error, "left", currentChatPosition);
+                            } else {
+                                console.error("Unexpected ai output:", message.error);
+                            }
+                        if (state.chat_state === "Generating Summary") {
+                            state.chat_state = "No Summary Generated"
+                        } else if (state.chat_state === "Generating Response") {
+                            state.chat_state = "Waiting"
                         }
                         break;
 
                     case "streamingComplete":
-                        break;
 
                     default:
                         console.error("Unhandled error action:", message.error);
+                        currentChatPosition++;
+                        updateChatMessage("Error: " + message.error, "left", currentChatPosition);
+                        currentChatPosition++;
+                        updateChatMessage("I honestly don't know what happened, but refreshing the page should solve the problem", "middle", currentChatPosition);
                 }
+                document.getElementById("send-btn").classList.remove("inactive");
                 return;
             }
 
@@ -88,6 +101,7 @@ class ports {
                 case "sessionInitialized":
                     console.log(`Session initialized for videoId: ${message.videoId}`);
                     state.chat_state = "No Summary Generated";
+                    document.getElementById("info-label").textContent = "Remaining tokens: " + message.text;
                     break;
 
                 case "pong":
@@ -98,6 +112,7 @@ class ports {
                     if (state.chat_state === "Generating Summary" || state.chat_state === "Generating Response") {
                         updateChatMessage(message.text+" **•**", "left", currentChatPosition);  // Update the message dynamically
                     }
+                    document.getElementById("info-label").textContent = "Remaining tokens: " + message.remaining;
                     currentChat = message.text;
                     break;
 
@@ -106,11 +121,9 @@ class ports {
                         state.chat_state === "Waiting";
                     }
                     updateChatMessage(currentChat, "left", currentChatPosition);
-                    currentChatLength += currentChat.split(/\s+/).length + Math.floor(currentChat.length / 4)
-                    if (currentChatLength > 3750) {
-                        currentChatPosition++;
-                        updateChatMessage("The conversation have exceeded the memory limit of the ai, from now on the ai will be prone to forget details about the video", "middle", currentChatPosition);
-                    }
+                    state.chat_state = "Waiting";
+                    document.getElementById("send-btn").classList.remove("inactive");
+                    document.getElementById("info-label").textContent = "Remaining tokens: " + message.text;
                     break;
 
                 default:
@@ -171,7 +184,9 @@ class ports {
     }
 }
 
+
 const port = new ports();
+
 
 // Function to check for video changes and initialize or remove the transcript tab
 function checkVideoChange() {
@@ -190,17 +205,20 @@ function checkVideoChange() {
             transcriptText = '';
             titleText = '';
             channelText = '';
+            currentChatPosition = 0;
+            state.chat_state = "Not Initialized";
+            warnUser.token_exceed = false;
+
             if (document.getElementById('transcript-content')) {
                 document.getElementById('transcript-content').innerHTML = '';
             }
-            currentChatPosition = 0;
-            state.chat_state = "Not Initialized";
             createTranscriptTab(); // Create the transcript tab for the new video
             GetVideoData(); // Start fetching the transcript
 
 
             port.new_Video(currentVideoId);
             state.chat_state = "No Summary Generated";
+            document.getElementById("send-btn").classList.remove("inactive");
 
         }
     }
@@ -311,23 +329,34 @@ function createTranscriptTab() {
     transcriptTab.id = "transcript-tab";
     transcriptTab.innerHTML = `
         <h3 id="transcript-title">AI Summary</h3>
+        <div id="info">
+             <p id="info-label">Remaining tokens: loading...</p>
+        </div>
         <div id="transcript-content">
             <div class="chat-message">
             </div>
         </div>
         <div id="input-container">
             <input type="text" id="message-input" placeholder="Ask a question..." />
-            <button id="send-btn">Send</button>
+            <button id="send-btn">Generate response</button>
         </div>
     `;
 
     document.getElementById("secondary").prepend(transcriptTab);
+    document.getElementById("send-btn").classList.add("inactive");
+    state.chat_state = "Not Initialized";
     console.log("Transcript tab created.");
 
 
     // Attach event listener to the generate summary button
     document.getElementById("send-btn").addEventListener("click", () => {
-        send_btn_click(document.getElementById("message-input").value.trim());
+        if (document.getElementById("send-btn").classList.contains("expanded")) {
+            send_btn_click(document.getElementById("message-input").value.trim());
+            state.chat_state = "Generating Response";
+        } else {
+            send_btn_click();
+            state.chat_state = "Generating Summary";
+        }
     });
 
     // Add an event listener for the "keyup" event
@@ -336,12 +365,11 @@ function createTranscriptTab() {
         if (event.key === "Enter") {
             // Get the value of the input field
             const inputValue = document.getElementById("message-input").value.trim();
-
             // Handle the input value
             if (inputValue) {
-                console.log("User input:", inputValue); // Replace this with your logic
+                document.getElementById("send-btn").classList.add("inactive");
                 send_btn_click(inputValue);
-                document.getElementById("message-input").value = ""; // Optionally clear the input field after sending
+                state.chat_state = "Generating Response";
             } else {
                 console.log("Input is empty");
             }
@@ -353,8 +381,17 @@ function createTranscriptTab() {
 // Function for handling send button clicks
 function send_btn_click(input) {
     if (state.chat_state === "No Summary Generated") {
-        generateSummary();
-    } else {
+
+        // Slide button to the right and reveal input
+        document.getElementById("send-btn").classList.add("expanded");
+        document.getElementById("send-btn").classList.add("inactive");
+        document.getElementById("message-input").style.display = "block"; // Show the input
+        document.getElementById("send-btn").textContent = "Send";
+        document.getElementById("message-input").focus(); // Automatically focus the input field
+        generateSummary()
+    } else if (state.chat_state === "Waiting" && input) {
+        document.getElementById("send-btn").classList.add("inactive");
+        document.getElementById("message-input").value = "";
         generateQuestion(input);
         // more to be written
     }
@@ -373,7 +410,7 @@ function removeTranscriptTab() {
 
 
 // Unified function to retrieve video data and update the UI (converted to async style)
-async function GetVideoData(retryCount = 5) {
+async function GetVideoData(retryCount = 10) {
     console.log("getting new video data");
     const YT_INITIAL_PLAYER_RESPONSE_RE = /ytInitialPlayerResponse\s*=\s*({.+?})\s*;\s*(?:var\s+(?:meta|head)|<\/script|\n)/;
     const summaryButton = document.getElementById("send-btn");
@@ -612,7 +649,7 @@ function generateSummary() {
 
     // Retrieve essential data from Chrome's synchronized storage (prompts and selected index)
     chrome.storage.sync.get(["promptGroups", "selectedPromptIndex"], (data) => {
-        const fallbackTemplate = "The video is titled: {title}, by {channel}. Transcript: {transcript}";
+        const fallbackTemplate = "Summarise ONLY the video titled: {title}, by {channel}. Transcript: {transcript}";
 
         const promptGroups = Array.isArray(data.promptGroups) ? data.promptGroups : [];  // Ensure promptGroups is an array
         const selectedIndex = data.selectedPromptIndex;
@@ -644,11 +681,6 @@ function generateSummary() {
             processedPrompt += "\n\n" + transcriptText;
         }
 
-        if ((processedPrompt.split(/\s+/).length + Math.floor(processedPrompt.length / 4)) > 3750) {
-            currentChatLength += processedPrompt.split(/\s+/).length + Math.floor(processedPrompt.length / 4)
-            currentChatPosition++;
-            updateChatMessage("Transcript may be longer than ai's token limit, response may miss out on parts of the video", "middle", currentChatPosition);
-        }
         currentChatPosition++;
         updateChatMessage("Summarising video...", "left", currentChatPosition);  // Placeholder for streaming
 
