@@ -1720,6 +1720,7 @@ chrome.runtime.onConnect.addListener((port) => {
         console.log("Disconnected from port:", port.name);
         if (videoSessions[port.name]?.instance) {
             videoSessions[port.name].instance.destroy();
+            console.log("Instance destroyed.");
         }
         delete videoSessions[port.name];
     });

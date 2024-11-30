@@ -153,8 +153,7 @@ class ports {
 
             // Clear the ping interval
             if (this.pingInterval) {
-                clearInterval(this.pingInterval); // Stop the interval
-                this.pingInterval = null; // Optional: clear reference to avoid reuse
+                this.pingInterval.clearInterval(); // Stop the interval
             }
 
 
@@ -196,9 +195,9 @@ function checkVideoChange() {
         if (port) {
             port.stop_port();
         }
-
-        currentVideoId = videoId;
         removeTranscriptTab();
+        currentVideoId = videoId;
+
 
         if (currentVideoId) { // Check if the new video id exists
             // Reset variables and UI for the new video
@@ -212,14 +211,24 @@ function checkVideoChange() {
             if (document.getElementById('transcript-content')) {
                 document.getElementById('transcript-content').innerHTML = '';
             }
-            createTranscriptTab(); // Create the transcript tab for the new video
-            GetVideoData(); // Start fetching the transcript
 
+            // Start observing the document body for changes
+            const observer = new MutationObserver(() => {
+                const secondary = document.querySelector("#secondary");
 
-            port.new_Video(currentVideoId);
-            state.chat_state = "No Summary Generated";
-            document.getElementById("send-btn").classList.remove("inactive");
+                if (secondary && !document.getElementById("transcript-tab")) {
+                    observer.disconnect(); // Stop observing once the element is found
+                    port.new_Video(currentVideoId); // Handles new video setup
+                    createTranscriptTab(secondary);
+                    state.chat_state = "No Summary Generated";
+                    document.getElementById("send-btn").classList.remove("inactive");
+                    GetVideoData(); // Assuming this fetches the video transcript
+                    console.log("Transcript tab successfully injected.");
+                }
+            });
 
+            // Observe the entire document for dynamic changes
+            observer.observe(document.body, { childList: true, subtree: true });
         }
     }
 }
@@ -411,6 +420,7 @@ function removeTranscriptTab() {
 
 // Unified function to retrieve video data and update the UI (converted to async style)
 async function GetVideoData(retryCount = 10) {
+    updateChatMessage("Loading transcript...", "middle", currentChatPosition);
     console.log("getting new video data");
     const YT_INITIAL_PLAYER_RESPONSE_RE = /ytInitialPlayerResponse\s*=\s*({.+?})\s*;\s*(?:var\s+(?:meta|head)|<\/script|\n)/;
     const summaryButton = document.getElementById("send-btn");
