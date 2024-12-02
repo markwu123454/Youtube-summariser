@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Actually Good Free YouTube Video Summarizer",
-  "version": "1.0",
+  "version": "1.0.1",
   "description": "A simple and completely free YouTube video summarizer.",
   "permissions": [
     "storage",
@@ -9,6 +9,11 @@
     "activeTab",
     "background"
   ],
+  "icons": {
+    "16": "assets/icon-16.png",
+    "48": "assets/icon-48.png",
+    "128": "assets/icon-128.png"
+  },
   "background": {
     "service_worker": "dist/background.bundle.js"
   },
@@ -26,6 +31,6 @@
     }
   ],
   "action": {
-    "default_title": "YouTube Transcript Settings"
+    "default_title": "YouTube Transcript Settings, "
   }
 }

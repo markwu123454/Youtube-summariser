@@ -3,12 +3,17 @@ document.addEventListener("DOMContentLoaded", () => {
     loadSettings();
 
     // Event listeners for buttons and menu items
-    document.getElementById("save-settings").addEventListener("click", saveSettings);
+    // document.getElementById("save-settings").addEventListener("click", saveSettings);
     document.getElementById("new-prompt").addEventListener("click", createNewPrompt);
     document.getElementById("save-prompt").addEventListener("click", savePrompt);
     document.getElementById("delete-prompt").addEventListener("click", deletePrompt);
-    document.getElementById("menu-api-key").addEventListener("click", () => showSection("api-key"));
-    document.getElementById("menu-model-prompt").addEventListener("click", () => showSection("model-prompt"));
+
+    // Event listener for page change
+    document.getElementById("menu-prompt").addEventListener("click", () => showSection("prompt-settings"));
+    document.getElementById("menu-contacts").addEventListener("click", () => showSection("contact-settings"));
+    document.getElementById('menu-github').addEventListener('click', function() {
+        window.location.href = 'https://github.com/markwu123454/Youtube-summariser';
+    });
 
     // Event listener for prompt dropdown
     document.getElementById("prompts-select").addEventListener("change", handlePromptSelection);
@@ -21,11 +26,9 @@ function loadSettings() {
             populatePromptOptions(data.promptGroups, data.selectedPromptIndex);
         } else {
             const examplePrompt = {
-                name: "Example prompt",
-                systemPromptSummary: "Objective: Provide a concise, professional summary of the transcript, focusing on the key ideas and main points. Eliminate unnecessary details, redundant phrasing, and any references to the transcript or video. Maintain an immersive tone by presenting the information directly.\n" +
-                    "\n" +
-                    "Instructions for Questions: After providing the summary, answer any user questions clearly and accurately. Refer directly to the content and context of the transcript while maintaining an immersive, professional tone. Avoid repetitive references and focus on delivering insightful, precise responses.",
-                userPromptSummary: "The video is titled: {title}, by {channel}. Transcript: {transcript}"
+                name: "Default prompt",
+                systemPromptSummary: "You are a youtube video asistant that specialize in summarising a video. The user may ask you questions after the summary.",
+                userPromptSummary: "Summarise the video titled: {title}, by {channel}. Transcript: {transcript}"
             };
             // Save example prompt if none exists
             chrome.storage.sync.set({promptGroups: [examplePrompt], selectedPromptIndex: 0}, () => {
@@ -139,15 +142,7 @@ function deletePrompt() {
 }
 
 function saveSettings() {
-    const apiKey = document.getElementById("api-key-input").value;
-    const encryptedApiKey = btoa(apiKey);  // Encode API key
-
-    chrome.storage.sync.set({geminiApiKey: encryptedApiKey}, () => {
-        document.getElementById("status").style.display = "block";
-        setTimeout(() => {
-            document.getElementById("status").style.display = "none";
-        }, 1000);
-    });
+    // Since api key is not required, this function doesn't really do anything
 }
 
 function showSection(section) {

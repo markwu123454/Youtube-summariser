@@ -17,23 +17,21 @@
 <div id="main-container">
     <div id="menu">
         <!-- Menu items with links to the respective sections (API Key, Model & Prompt) -->
-        <a href="#api-key" id="menu-api-key">API Key</a>
-        <a href="#model-prompt" id="menu-model-prompt">Model & Prompt</a>
+        <a href="#prompt-settings" id="menu-prompt">Prompt</a>
+        <a href="#contact-settings" id="menu-contacts">Bugs and Feedback</a>
+        <a href="#" id="menu-github">Github</a>
     </div>
 
     <div id="settings-content">
 
-        <!-- API Key Section -->
-        <div id="api-key">
-            <h3>Gemini API Key</h3>
-        </div>
+
 
         <!-- Model & Prompt Section -->
-        <div id="model-prompt" style="display: none;">
+        <div id="prompt-settings">
             <h3>Model & Prompt Settings</h3>
 
             <!-- prompts selection content -->
-            <div id="prompts" class="tab-content">
+                <div id="prompts" class="tab-content">
                 <label for="prompts-select">Select Prompts:</label>
                 <select id="prompts-select">
                     <option value="new-prompt">New prompt</option>
@@ -69,14 +67,28 @@
                 <p id="delete-prompt-status" style="display: none;">Prompt deleted!</p>
             </div>
         </div>
+
+        <div id="contact-settings" hidden="hidden">
+            <h3>Contacts</h3>
+            <label id="friendly-text">
+                Hi! Thank you for trying out this extension! I know it's not perfect—it's still a work in progress, with bugs, quirks, and some rough edges. I appreciate your patience.<br>
+                This is my first serious app, so I'm learning as I go. Your feedback, suggestions, and bug reports mean a lot and help me improve.<br>
+                I'm currently in high school, so responses may be delayed, but I'll do my best to follow up with any messages.<br>
+                If you're interested in the source code, I've provided a link to the GitHub repo. Please note, the code might be a bit messy as I'm still developing my habits.<br>
+                Contact me via <a href="mailto:mark.wu123454@gmail.com">my email</a>.
+            </label>
+        </div>
     </div>
 </div>
 
-<!-- Save button and status message section -->
+
+<!-- Save button and status message section
 <div class="save-container">
     <p id="status">Settings saved!</p>
     <button id="save-settings">Save Settings</button>
 </div>
+-->
+
 
 <!-- External script for handling functionality -->
 <script src="settings.js"></script>
