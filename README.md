@@ -1,5 +1,7 @@
 # YouTube Video Summarizer Chrome Extension
 
+This is a submission for the Google Chrome Built-in AI Challenge.
+
 This Chrome extension leverages Chrome Canary's built-in AI to summarize YouTube videos and answer questions about the content. It is designed to provide concise and professional summaries of videos, with the ability to interact with the AI to ask questions based on the video content.
 
 ## Features
@@ -33,13 +35,6 @@ This Chrome extension leverages Chrome Canary's built-in AI to summarize YouTube
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Project description
-
-I created this Chrome extension because in the past I’ve struggled to find good YouTube summarizers that meet my needs. Most existing solutions either limit usage, restrict quality, or fail to function reliably. Free options often straight up doesn't work, which is quite annoying. So for a while now I've wanted to develop a fully functional, AI-driven YouTube video summarizer that is both reliable and free.
-
-Initially, my goal was to just have it be able to generating video summaries. However, after using the summarizer, I thought it could be even more useful with an added question-answering feature. This new feature allows users to ask the AI questions about the video content, providing a more interactive and versatile experience.
-
-For this extension, I chose to use Chrome Canary's built-in Prompt API because of its flexibility. While I considered using Chrome's Summarization API, I  decided against it to ensure the AI could also handle user questions seamlessly. However, I am exploring the possibility of using the Summarization API in the future to address the AI's current token limitations. For longer videos, this could help create a condensed summary of the transcript before passing the content through the Prompt API, which will help save tokens and so allowing the it to also work on larger videos.
+questions seamlessly. However, I am exploring the possibility of using the Summarization API in the future to address the AI's current token limitations. For longer videos, this could help create a condensed summary of the transcript before passing the content through the Prompt API, which will help save tokens and so allowing the it to also work on larger videos.
 
 p.s. Because I'm self taught on coding, I don't know about coding etiquette and standards people adhere to, so I understand how the code may be hard to read, I'm sorry about that.
